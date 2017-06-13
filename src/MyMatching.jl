@@ -51,5 +51,6 @@ function matching(m_prefs,f_prefs)
 
 end
 
+export matching
 
 end
