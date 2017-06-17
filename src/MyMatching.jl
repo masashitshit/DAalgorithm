@@ -49,6 +49,7 @@ function matching(m_prefs,f_prefs)
                             
                                 order[matched_f[m_prefs[i][order[i]]]] +=1         #取って代わられた男性の志望順位を一つ下げる
                                 accepted_m[i] = 1
+                                matched_m[matched_f[m_prefs[i][order[i]]]] = 0
                                 accepted_m[matched_f[m_prefs[i][order[i]]]] = 0
                                 matched_m[i] = m_prefs[i][order[i]]
                                 matched_f[m_prefs[i][order[i]]] = i
