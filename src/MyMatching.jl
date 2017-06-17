@@ -5,86 +5,76 @@ function matching(m_prefs,f_prefs)
     for o in 1:m
         push!(m_prefs[o],0)
     end
-
+    
     for k in 1:n
         push!(f_prefs[k],0)
     end
-    matched_m = zeros(Int64,m)
-    matched_f = zeros(Int64,n)
-    accepted_m = zeros(Int64,m)         #男性iの受け入れ先が決まったらaccepted_m[1]=1
     
-    while sum(accepted_m) !== m       #男性が全員受け入れ先が決まるまで
+    mm = length(m_prefs)
+    nn = length(f_prefs)
+    matched_m = zeros(Int64,mm)
+    matched_f = zeros(Int64,nn)
+    accepted_m = zeros(Int64,mm)
+    order = ones(Int64,mm)
+    
+    while sum(accepted_m) < mm          #男性全員がマッチするまで
         
-        for i in 1:m
+        for i in 1:mm
             
-            if m_prefs[i][1] == 0       #男性iの第一志望が独身のとき
+            if accepted_m[i] == 1     #男性iがマッチ済み
                 
-                accepted_m[i] = 1       #男性iは受け入れ済みに
+            else　　　#男性iがマッチ済みでない
+            
+                if m_prefs[i][order[i]] == 0       #男性が独身を希望
+                
+                    accepted_m[i] = 1
+                
+                else　　　　#男性が女性を希望
+                
+                    if findfirst(f_prefs[m_prefs[i][order[i]]],i) == 0      #男性の希望する女性の選択肢の中に男性がいない
+                    
+                        order[i] +=1           #男性の志望順位を一つ下げる
+                    
+                    else　　　　　　#男性が女性の評価対象
+                    
+                        if matched_f[m_prefs[i][order[i]]] == 0       #男性の希望する女性のもとに誰もいないとき
+                        
+                            matched_m[i] = m_prefs[i][order[i]]
+                            matched_f[m_prefs[i][order[i]]] = i
+                            accepted_m[i] = 1
+                        
+                        else　　　　　　　　　#女性が別の男性とマッチ済み
+                        
+                            if findfirst(f_prefs[m_prefs[i][order[i]]],i) < findfirst(f_prefs[m_prefs[i][order[i]]],matched_f[m_prefs[i][order[i]]])
+                            
+                                order[matched_f[m_prefs[i][order[i]]]] +=1         #取って代わられた男性の志望順位を一つ下げる
+                                accepted_m[i] = 1
+                                accepted_m[matched_f[m_prefs[i][order[i]]]] = 0
+                                matched_m[i] = m_prefs[i][order[i]]
+                                matched_f[m_prefs[i][order[i]]] = i
+                            
+                            else　　　　　#マッチ済みの男性のほうがいい
+                            
+                                order[i] +=1
+                            
+                            end
+                            
+                        end
+                            
+                    end
+                            
+                end
                 
             end
-            
-            if m_prefs[i][1] !== 0      #男性gに第一志望の女性がいるとき
-                
-                if findfirst(f_prefs[m_prefs[i][1]],i) == 0       #男性iが第一志望の女性の眼中にないとき
-                    
-                    shift!(m_prefs[i]) #男性iの志望から第一志望を除く
-                    
-                end
-                
-                if findfirst(f_prefs[m_prefs[i][1]],i) == 0      #男性gが第一志望の女性の選択肢に入っているとき
-                    
-                    if matched_f[m_prefs[i][1]] == 0        #第一志望の女性が誰も受け入れていないとき
-                        
-                        matched_m[i] = m_prefs[i][1]
-                        matched_f[m_prefs[i][1]] = i
-                        accepted_m[i] = 1　　　　　　　　　#男性iは受け入れ済みに
-                        
-                    end
-                    
-                    if matched_f[m_prefs[i][1]] !== 0        #第一志望の女性が誰かを受け入れているとき
-                        
-                        if findfirst(f_prefs[m_prefs[i][1]],i) < findfirst(f_prefs[m_prefs[i][1]],matched_f[m_prefs[i][1]])
-                                 #男性iが保留されていた男性よりも女性の好ましい選択であるとき
                             
-                                accepted_m[matched_f[m_prefs[i][1]]] = 0      #保留されていた男性を受け入れ済みから除く
-                                shift!(m_prefs[matched_f[m_prefs[i][1]]]) 　　#保留されていた男性の志望から第一志望を除く
-                                matched_m[matched_f[m_prefs[i][1]]] =　0 
-                            
-                                matched_m[i] = m_prefs[i][1]
-                                matched_f[m_prefs[i][1]] = i
-                                accepted_m[i] = 1               #男性iは受け入れ済みに
-                            
-                        end
-                         
-                        if findfirst(f_prefs[m_prefs[i][1]],i) > findfirst(f_prefs[m_prefs[i][1]],matched_f[m_prefs[i][1]]) 
-                                #保留されていた男性が男性iよりも女性の好ましい選択であるとき
-                                
-                                shift!(m_prefs[i])       #男性iの志望から第一志望を除く
-                                
-                        end
-                            
-                    end
-                        
-                end
-                    
-             end
-                
         end
-            
+                            
     end
-        
-    return matched_m,matched_f
-        
+                            
+    return matched_m, matched_f
+                            
 end
 
 export matching
 
 end
-                                
-                                
-                                
-                    
-                    
-                        
-                    
-                        
