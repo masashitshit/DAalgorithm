@@ -2,16 +2,19 @@ module MyMatching
 
 function matching(m_prefs,f_prefs)
     
-    for o in 1:m
-        push!(m_prefs[o],0)
-    end
-    
-    for k in 1:n
-        push!(f_prefs[k],0)
-    end
     
     mm = length(m_prefs)
     nn = length(f_prefs)
+    
+    for o in 1:mm
+        push!(m_prefs[o],0)
+    end
+    
+    for k in 1:nn
+        push!(f_prefs[k],0)
+    end
+    
+    
     matched_m = zeros(Int64,mm)
     matched_f = zeros(Int64,nn)
     accepted_m = zeros(Int64,mm)
