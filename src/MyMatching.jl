@@ -177,6 +177,6 @@ function matching3(prop_prefs,resp_prefs,caps)
     
 end                                        
 
-export matching
+export matching3
 
 end
