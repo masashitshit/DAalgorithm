@@ -126,17 +126,19 @@ function matching3(prop_prefs,resp_prefs,caps)
                             #45
                             #大学の志望度が一番低い学生を右端に置く
                             
-                            if z == 1
+                            zz = findfirst(resp_matched[indptr[prop_prefs[i][order[i]]]:indptr[prop_prefs[i][order[i]]+1]-1],i)
+                            #iが何番目に入れられたか
+                            if zz == 1
                                 
                             else
                                 
                                 right = findfirst(resp_prefs[prop_prefs[i][order[i]]],i)
-                                left = findfirst(resp_prefs[prop_prefs[i][order[i]]],resp_matched[indptr[prop_prefs[i][order[i]]]+z-2])
+                                left = findfirst(resp_prefs[prop_prefs[i][order[i]]],resp_matched[indptr[prop_prefs[i][order[i]]]+zz-2])
                                 
                                 if right < left
                                 
-                                    resp_matched[indptr[prop_prefs[i][order[i]]]+z-1] = resp_matched[indptr[prop_prefs[i][order[i]]]+z-2]
-                                    resp_matched[indptr[prop_prefs[i][order[i]]]+z-2] = i
+                                    resp_matched[indptr[prop_prefs[i][order[i]]]+zz-1] = resp_matched[indptr[prop_prefs[i][order[i]]]+zz-2]
+                                    resp_matched[indptr[prop_prefs[i][order[i]]]+zz-2] = i
                                     
                                 else
                                     
@@ -175,7 +177,7 @@ function matching3(prop_prefs,resp_prefs,caps)
                                 
     return prop_matched, resp_matched
     
-end                                        
+end
 
 export matching3
 
