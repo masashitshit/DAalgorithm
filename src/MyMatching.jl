@@ -10,9 +10,7 @@ function matching3(prop_prefs,resp_prefs)
         push!(prop_prefs[o],0)
     end
     
-    for k in 1:nn
-        push!(resp_prefs[k],0)
-    end
+
     
     
     prop_matched = zeros(Int64,mm)
@@ -86,9 +84,10 @@ function matching3(prop_prefs,resp_prefs,caps)
     for o in 1:mm
         push!(prop_prefs[o],0)
     end
-    for k in 1:nn
-        push!(resp_prefs[k],0)
-    end 
+
+    #resp_prefsに0を入れる必要はなかった
+    
+    
     #90
     prop_matched = zeros(Int64,mm)
     resp_matched = zeros(Int64,sum(caps))
@@ -177,7 +176,7 @@ function matching3(prop_prefs,resp_prefs,caps)
                                 
     return prop_matched, resp_matched
     
-end
+end                                         
 
 export matching3
 
