@@ -2,79 +2,80 @@ module MyMatching
 
 function matching3(prop_prefs,resp_prefs)
     
-    
-    mm = length(prop_prefs)
-    nn = length(resp_prefs)
-    
-    for o in 1:mm
-        push!(prop_prefs[o],0)
-    end
-    
+    m_prefs = prop_prefs
+    f_prefs = resp_prefs
 
-    
-    
-    prop_matched = zeros(Int64,mm)
-    resp_matched = zeros(Int64,nn)
-    prop_accepted = zeros(Int64,mm)
+    mm = length(m_prefs)
+    nn = length(f_prefs)
+
+    for o in 1:mm
+        push!(m_prefs[o],0)
+    end
+    for k in 1:nn
+        push!(f_prefs[k],0)
+    end
+
+    matched_m = zeros(Int64,mm)
+    matched_f = zeros(Int64,nn)
+    accepted_m = zeros(Int64,mm)
     order = ones(Int64,mm)
-    
-    while sum(prop_accepted) < mm          #男性全員がマッチするまで
-        
+
+    while sum(accepted_m) < mm          #男性全員がマッチするまで
+
         for i in 1:mm
-            
-            if prop_accepted[i] == 1     #男性iがマッチ済み
-                
+
+            if accepted_m[i] == 1     #男性iがマッチ済み
+
             else　　　#男性iがマッチ済みでない
-            
-                if prop_prefs[i][order[i]] == 0       #男性が独身を希望
-                #30
-                    prop_accepted[i] = 1
                 
+                if m_prefs[i][order[i]] == 0       #男性が独身を希望
+
+                    accepted_m[i] = 1
+
                 else　　　　#男性が女性を希望
-                
-                    if findfirst(resp_prefs[prop_prefs[i][order[i]]],i) == 0      #男性の希望する女性の選択肢の中に男性がいない
-                    
+
+                    if findfirst(f_prefs[m_prefs[i][order[i]]],i) == 0      #男性の希望する女性の選択肢の中に男性がいない
+
                         order[i] +=1           #男性の志望順位を一つ下げる
-                    
+
                     else　　　　　　#男性が女性の評価対象
-                   #40 
-                        if resp_matched[prop_prefs[i][order[i]]] == 0       #男性の希望する女性のもとに誰もいないとき
-                        
-                            prop_matched[i] = prop_prefs[i][order[i]]
-                            resp_matched[prop_prefs[i][order[i]]] = i
-                            prop_accepted[i] = 1
-                        
+
+                        if matched_f[m_prefs[i][order[i]]] == 0       #男性の希望する女性のもとに誰もいないとき
+
+                            matched_m[i] = m_prefs[i][order[i]]
+                            matched_f[m_prefs[i][order[i]]] = i
+                            accepted_m[i] = 1
+
                         else　　　　　　　　　#女性が別の男性とマッチ済み
+
+                            if findfirst(f_prefs[m_prefs[i][order[i]]],i) < findfirst(f_prefs[m_prefs[i][order[i]]],matched_f[m_prefs[i][order[i]]])
+
+                                order[matched_f[m_prefs[i][order[i]]]] +=1         #取って代わられた男性の志望順位を一つ下げ
+                                accepted_m[i] = 1
+                                matched_m[matched_f[m_prefs[i][order[i]]]] = 0
+                                accepted_m[matched_f[m_prefs[i][order[i]]]] = 0
+                                matched_m[i] = m_prefs[i][order[i]]
+                                matched_f[m_prefs[i][order[i]]] = i
                         
-                            if findfirst(resp_prefs[prop_prefs[i][order[i]]],i) < findfirst(resp_prefs[prop_prefs[i][order[i]]],resp_matched[prop_prefs[i][order[i]]])
-                      #50      
-                                order[resp_matched[prop_prefs[i][order[i]]]] +=1         #取って代わられた男性の志望順位を一つ下げる
-                                prop_accepted[i] = 1
-                                prop_matched[resp_matched[prop_prefs[i][order[i]]]] = 0
-                                prop_accepted[resp_matched[prop_prefs[i][order[i]]]] = 0
-                                prop_accepted[i] = prop_prefs[i][order[i]]
-                                resp_matched[prop_prefs[i][order[i]]] = i
-                            
                             else　　　　　#マッチ済みの男性のほうがいい
-                            
-                                order[i] +=1
-                            
+
+                                order[i] += 1
                             end
                             
-                        end
-                            
+                        end            
+
                     end
-                            
-                end
+
+                end  
                 
             end
-                            
+
         end
-                            
+
     end
-                            
-    return prop_matched, resp_matched
-                            
+                       
+    return matched_m, matched_f
+
 end
 
 function matching3(prop_prefs,resp_prefs,caps)
@@ -176,7 +177,7 @@ function matching3(prop_prefs,resp_prefs,caps)
                                 
     return prop_matched, resp_matched
     
-end                                         
+end    
 
 export matching3
 
