@@ -78,7 +78,7 @@ function matching3(prop_prefs,resp_prefs)
 
 end
 
-function matching3(prop_prefs,resp_prefs,caps)
+function matching4(prop_prefs,resp_prefs,caps)
     #81
     mm = length(prop_prefs)
     nn = length(resp_prefs)
@@ -93,8 +93,8 @@ function matching3(prop_prefs,resp_prefs,caps)
     for k in 1:nn  
         indptr[k+1] = indptr[k] + caps[k]
     end
+    #indptrを関数内に内蔵！
     
-    #90
     prop_matched = zeros(Int64,mm)
     resp_matched = zeros(Int64,sum(caps))
     prop_accepted = zeros(Int64,mm)
@@ -128,52 +128,36 @@ function matching3(prop_prefs,resp_prefs,caps)
                             resp_matched[indptr[prop_prefs[i][order[i]]]+z-1] = i  #0...0にiを左詰めで入れる
                             prop_matched[i] = prop_prefs[i][order[i]]
                             prop_accepted[i] = 1
-                            #45
-                            #大学の志望度が一番低い学生を右端に置く
                             
-                            zz = findfirst(resp_matched[indptr[prop_prefs[i][order[i]]]:indptr[prop_prefs[i][order[i]]+1]-1],i)
-                            #iが何番目に入れられたか
-                            if zz == 1
-                                
-                            else
-                                
-                                right = findfirst(resp_prefs[prop_prefs[i][order[i]]],i)
-                                left = findfirst(resp_prefs[prop_prefs[i][order[i]]],resp_matched[indptr[prop_prefs[i][order[i]]]+zz-2])
-                                
-                                if right < left
-                                
-                                    resp_matched[indptr[prop_prefs[i][order[i]]]+zz-1] = resp_matched[indptr[prop_prefs[i][order[i]]]+zz-2]
-                                    resp_matched[indptr[prop_prefs[i][order[i]]]+zz-2] = i
-                                    
-                                else
-                                    
-                                end
-                                
-                            end
                             
                         else
                             
-                            if findfirst(resp_prefs[prop_prefs[i][order[i]]],i) > findfirst(resp_prefs[prop_prefs[i][order[i]]],resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]])
+                            passed = resp_matched[indptr[prop_prefs[i][order[i]]]:indptr[prop_prefs[i][order[i]]+1]-1]
+                            #受け入れ保留されている学生たちのarray
+                            
+                            ranking = [findfirst(resp_prefs[prop_prefs[i][order[i]]],passed[p]) for p in 1:length(passed)]
+                            #彼らのランキング
+                            
+                            worst = resp_prefs[prop_prefs[i][order[i]]][maximum(ranking)]
+                            #保留されている中で最もランキングの低い学生
+                            
+                            if findfirst(resp_prefs[prop_prefs[i][order[i]]],i) > worst
+                                #最下位の人よりも低い
                                 
                                 order[i] += 1
                                 
                             else
                                 
-                                prop_accepted[resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]]] = 0
+                                ww = findfirst(resp_matched[indptr[prop_prefs[i][order[i]]]:indptr[prop_prefs[i][order[i]]+1]-1],worst)
+                                #最下位の人が何番目にいるのか
+                                
+                                prop_accepted[worst] = 0
                                 prop_accepted[i] = 1
-                                prop_matched[resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]]] = 0
+                                prop_matched[worst] = 0
                                 prop_matched[i] = prop_prefs[i][order[i]]
-                                order[resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]]] += 1
-                                resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]] = i
-
-                                if findfirst(resp_prefs[prop_prefs[i][order[i]]],i) > findfirst(resp_prefs[prop_prefs[i][order[i]]],resp_matched[indptr[[prop_prefs[i][order[i]]+1]-2]])
+                                order[worst] += 1
+                                resp_matched[indptr[prop_prefs[i][order[i]]]+ww-1] = i
                                     
-                                else
-                                    
-                                    resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]] = resp_matched[indptr[[prop_prefs[i][order[i]]+1]-2]]
-                                    resp_matched[indptr[[prop_prefs[i][order[i]]+1]-2]] = i
-                                    
-                                end
                                 
                             end
                             
@@ -191,7 +175,7 @@ function matching3(prop_prefs,resp_prefs,caps)
                                 
     return prop_matched, resp_matched
     
-end    
+end                                         
 
 export matching3
 
