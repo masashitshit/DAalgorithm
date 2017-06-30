@@ -165,6 +165,15 @@ function matching3(prop_prefs,resp_prefs,caps)
                                 prop_matched[i] = prop_prefs[i][order[i]]
                                 order[resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]]] += 1
                                 resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]] = i
+
+                                if findfirst(resp_prefs[prop_prefs[i][order[i]]],i) > findfirst(resp_prefs[prop_prefs[i][order[i]]],resp_matched[indptr[[prop_prefs[i][order[i]]+1]-2]])
+                                    
+                                else
+                                    
+                                    resp_matched[indptr[[prop_prefs[i][order[i]]+1]-1]] = resp_matched[indptr[[prop_prefs[i][order[i]]+1]-2]]
+                                    resp_matched[indptr[[prop_prefs[i][order[i]]+1]-2]] = i
+                                    
+                                end
                                 
                             end
                             
