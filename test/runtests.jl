@@ -160,43 +160,43 @@ end
     )
     push!(matchings_many_to_one, d)
 
-    # Test case: many-to-one; from Roth and Sotomayor Page 16
-    m, n = 7, 5
-    s_prefs = [
-        5, 1, 0, 2, 3, 4,
-        2, 5, 1, 0, 3, 4,
-        3, 1, 0, 2, 4, 5,
-        4, 1, 0, 2, 3, 5,
-        1, 2, 0, 3, 4, 5,
-        1, 3, 0, 2, 4, 5,
-        1, 3, 4, 0, 2, 6,
-    ]
-    s_prefs = reshape(s_prefs, n+1, m)
-    c_prefs = [
-        1, 2, 3, 4, 5, 6, 7, 0,
-        5, 2, 0, 1, 3, 4, 6, 7,
-        6, 7, 3, 0, 1, 2, 4, 5,
-        7, 4, 0, 1, 2, 3, 5, 6,
-        2, 1, 0, 3, 4, 5, 6, 7,
-    ]
-    c_prefs = reshape(c_prefs, m+1, n)
-    caps = [3, 1, 1, 1, 1]
-    indptr = [1, 4, 5, 6, 7,  8]
-    s_matches_s_opt = [5, 2, 3, 4, 1, 1, 1]
-    c_matches_s_opt = [5, 6, 7, 2, 3, 4, 1]
-    s_matches_c_opt = [1, 5, 1, 1, 2, 3, 4]
-    c_matches_c_opt = [1, 3, 4, 5, 6, 7, 2]
-    d = Dict(
-        "s_prefs" => s_prefs,
-        "c_prefs" => c_prefs,
-        "caps" => caps,
-        "s_matches_s_opt" => s_matches_s_opt,
-        "c_matches_s_opt" => c_matches_s_opt,
-        "s_matches_c_opt" => s_matches_c_opt,
-        "c_matches_c_opt" => c_matches_c_opt,
-        "indptr" => indptr,
-    )
-    push!(matchings_many_to_one, d)
+# #     Test case: many-to-one; from Roth and Sotomayor Page 16
+#     m, n = 7, 5
+#     s_prefs = [
+#         5, 1, 0, 2, 3, 4,
+#         2, 5, 1, 0, 3, 4,
+#         3, 1, 0, 2, 4, 5,
+#         4, 1, 0, 2, 3, 5,
+#         1, 2, 0, 3, 4, 5,
+#         1, 3, 0, 2, 4, 5,
+#         1, 3, 4, 0, 2, 6,
+#     ]
+#     s_prefs = reshape(s_prefs, n+1, m)
+#     c_prefs = [
+#         1, 2, 3, 4, 5, 6, 7, 0,
+#         5, 2, 0, 1, 3, 4, 6, 7,
+#         6, 7, 3, 0, 1, 2, 4, 5,
+#         7, 4, 0, 1, 2, 3, 5, 6,
+#         2, 1, 0, 3, 4, 5, 6, 7,
+#     ]
+#     c_prefs = reshape(c_prefs, m+1, n)
+#     caps = [3, 1, 1, 1, 1]
+#     indptr = [1, 4, 5, 6, 7,  8]
+#     s_matches_s_opt = [5, 2, 3, 4, 1, 1, 1]
+#     c_matches_s_opt = [5, 6, 7, 2, 3, 4, 1]
+#     s_matches_c_opt = [1, 5, 1, 1, 2, 3, 4]
+#     c_matches_c_opt = [1, 3, 4, 5, 6, 7, 2]
+#     d = Dict(
+#         "s_prefs" => s_prefs,
+#         "c_prefs" => c_prefs,
+#         "caps" => caps,
+#         "s_matches_s_opt" => s_matches_s_opt,
+#         "c_matches_s_opt" => c_matches_s_opt,
+#         "s_matches_c_opt" => s_matches_c_opt,
+#         "c_matches_c_opt" => c_matches_c_opt,
+#         "indptr" => indptr,
+#     )
+#     push!(matchings_many_to_one, d)
 
     @testset "one-to-one: Vector of Vectors" begin
         for d in matchings_one_to_one
