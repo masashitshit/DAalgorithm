@@ -78,7 +78,7 @@ function matching3(prop_prefs,resp_prefs)
 
 end
 
-function matching4(prop_prefs,resp_prefs,caps)
+function matching3(prop_prefs,resp_prefs,caps)
     #81
     mm = length(prop_prefs)
     nn = length(resp_prefs)
