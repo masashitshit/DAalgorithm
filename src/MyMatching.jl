@@ -88,6 +88,11 @@ function matching3(prop_prefs,resp_prefs,caps)
 
     #resp_prefsに0を入れる必要はなかった
     
+    indptr = Array{Int}(nn+1)
+    indptr[1] = 1
+    for k in 1:nn  
+        indptr[k+1] = indptr[k] + caps[k]
+    end
     
     #90
     prop_matched = zeros(Int64,mm)
