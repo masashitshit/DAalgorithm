@@ -79,7 +79,7 @@ function matching3(prop_prefs,resp_prefs)
 end
 
 function matching3(prop_prefs,resp_prefs,caps)
-    #81
+    
     mm = length(prop_prefs)
     nn = length(resp_prefs)
     for o in 1:mm
@@ -104,28 +104,29 @@ function matching3(prop_prefs,resp_prefs,caps)
         
         for i in 1:mm
             
-            if prop_accepted[i] == 1     #学生iがマッチ済み
-       #101         
+            if prop_accepted[i] == 1        #学生iがマッチ済み
+         
             else
                 
-                if prop_prefs[i][order[i]] == 0      #学生iの第一志望が浪人
+                if prop_prefs[i][order[i]] == 0       #学生iの第一志望が浪人
                     
                     prop_accepted[i] = 1
                     
                 else
-                    #109
+
                     if findfirst(resp_prefs[prop_prefs[i][order[i]]],i) == 0      #学生iが志望する大学の選択肢の中に学生iがいない
                         
-                        order[i] +=1             #学生iの志望順位を一つ下げる
+                        order[i] +=1         #学生iの志望順位を一つ下げる
                         
                     else
-                        #115
+
                         if findfirst(resp_matched[indptr[prop_prefs[i][order[i]]]:indptr[prop_prefs[i][order[i]]+1]-1],0) !== 0
-                            #学生iが志望する大学の受け入れ枠に空きがあるとき(0が受け入れ枠にある)
+                           #学生iが志望する大学の受け入れ枠に空きがあるとき(0が受け入れ枠にある)
                             
                             z = findfirst(resp_matched[indptr[prop_prefs[i][order[i]]]:indptr[prop_prefs[i][order[i]]+1]-1],0)
                             #0が左から何番目にあるか
-                            resp_matched[indptr[prop_prefs[i][order[i]]]+z-1] = i  #0...0にiを左詰めで入れる
+                            
+                            resp_matched[indptr[prop_prefs[i][order[i]]]+z-1] = i     #0...0にiを左詰めで入れる
                             prop_matched[i] = prop_prefs[i][order[i]]
                             prop_accepted[i] = 1
                             
@@ -142,7 +143,7 @@ function matching3(prop_prefs,resp_prefs,caps)
                             #保留されている中で最もランキングの低い学生
                             
                             if findfirst(resp_prefs[prop_prefs[i][order[i]]],i) > worst
-                                #最下位の人よりも低い
+                               #最下位の人よりも低い
                                 
                                 order[i] += 1
                                 
@@ -175,7 +176,7 @@ function matching3(prop_prefs,resp_prefs,caps)
                                 
     return prop_matched, resp_matched
     
-end                                         
+end                                            
 
 export matching3
 
