@@ -1,7 +1,7 @@
 using MyMatching
 using Base.Test
 
-const _deferred_acceptance = matching3
+const _deferred_acceptance = my_deferred_acceptance
 const test_matrix = false
 
 function mat2vecs{T<:Integer}(prefs::Matrix{T})
@@ -160,43 +160,43 @@ end
     )
     push!(matchings_many_to_one, d)
 
-# #     Test case: many-to-one; from Roth and Sotomayor Page 16
-#     m, n = 7, 5
-#     s_prefs = [
-#         5, 1, 0, 2, 3, 4,
-#         2, 5, 1, 0, 3, 4,
-#         3, 1, 0, 2, 4, 5,
-#         4, 1, 0, 2, 3, 5,
-#         1, 2, 0, 3, 4, 5,
-#         1, 3, 0, 2, 4, 5,
-#         1, 3, 4, 0, 2, 6,
-#     ]
-#     s_prefs = reshape(s_prefs, n+1, m)
-#     c_prefs = [
-#         1, 2, 3, 4, 5, 6, 7, 0,
-#         5, 2, 0, 1, 3, 4, 6, 7,
-#         6, 7, 3, 0, 1, 2, 4, 5,
-#         7, 4, 0, 1, 2, 3, 5, 6,
-#         2, 1, 0, 3, 4, 5, 6, 7,
-#     ]
-#     c_prefs = reshape(c_prefs, m+1, n)
-#     caps = [3, 1, 1, 1, 1]
-#     indptr = [1, 4, 5, 6, 7,  8]
-#     s_matches_s_opt = [5, 2, 3, 4, 1, 1, 1]
-#     c_matches_s_opt = [5, 6, 7, 2, 3, 4, 1]
-#     s_matches_c_opt = [1, 5, 1, 1, 2, 3, 4]
-#     c_matches_c_opt = [1, 3, 4, 5, 6, 7, 2]
-#     d = Dict(
-#         "s_prefs" => s_prefs,
-#         "c_prefs" => c_prefs,
-#         "caps" => caps,
-#         "s_matches_s_opt" => s_matches_s_opt,
-#         "c_matches_s_opt" => c_matches_s_opt,
-#         "s_matches_c_opt" => s_matches_c_opt,
-#         "c_matches_c_opt" => c_matches_c_opt,
-#         "indptr" => indptr,
-#     )
-#     push!(matchings_many_to_one, d)
+    # Test case: many-to-one; from Roth and Sotomayor Page 16
+    m, n = 7, 5
+    s_prefs = [
+        5, 1, 0, 2, 3, 4,
+        2, 5, 1, 0, 3, 4,
+        3, 1, 0, 2, 4, 5,
+        4, 1, 0, 2, 3, 5,
+        1, 2, 0, 3, 4, 5,
+        1, 3, 0, 2, 4, 5,
+        1, 3, 4, 0, 2, 6,
+    ]
+    s_prefs = reshape(s_prefs, n+1, m)
+    c_prefs = [
+        1, 2, 3, 4, 5, 6, 7, 0,
+        5, 2, 0, 1, 3, 4, 6, 7,
+        6, 7, 3, 0, 1, 2, 4, 5,
+        7, 4, 0, 1, 2, 3, 5, 6,
+        2, 1, 0, 3, 4, 5, 6, 7,
+    ]
+    c_prefs = reshape(c_prefs, m+1, n)
+    caps = [3, 1, 1, 1, 1]
+    indptr = [1, 4, 5, 6, 7,  8]
+    s_matches_s_opt = [5, 2, 3, 4, 1, 1, 1]
+    c_matches_s_opt = [5, 6, 7, 2, 3, 4, 1]
+    s_matches_c_opt = [1, 5, 1, 1, 2, 3, 4]
+    c_matches_c_opt = [1, 3, 4, 5, 6, 7, 2]
+    d = Dict(
+        "s_prefs" => s_prefs,
+        "c_prefs" => c_prefs,
+        "caps" => caps,
+        "s_matches_s_opt" => s_matches_s_opt,
+        "c_matches_s_opt" => c_matches_s_opt,
+        "s_matches_c_opt" => s_matches_c_opt,
+        "c_matches_c_opt" => c_matches_c_opt,
+        "indptr" => indptr,
+    )
+    push!(matchings_many_to_one, d)
 
     @testset "one-to-one: Vector of Vectors" begin
         for d in matchings_one_to_one
@@ -217,11 +217,11 @@ end
 
     @testset "many-to-one: Vector of Vectors" begin
         for d in matchings_many_to_one
-            s_prefs, c_prefs = mat2vecs.(d["s_prefs"], d["c_prefs"])
+            s_prefs, c_prefs = mat2vecs.([d["s_prefs"], d["c_prefs"]])
 
             # Default (Student proposal)
             s_matches, c_matches, indptr =
-                deferred_acceptance(s_prefs, c_prefs, d["caps"])
+                _deferred_acceptance(s_prefs, c_prefs, d["caps"])
             sort_matches!(c_matches, indptr)
             @test s_matches == d["s_matches_s_opt"]
             @test c_matches == d["c_matches_s_opt"]
@@ -252,7 +252,7 @@ end
 
                 # Default (Student proposal)
                 s_matches, c_matches, indptr =
-                    deferred_acceptance(s_prefs, c_prefs, d["caps"])
+                    _deferred_acceptance(s_prefs, c_prefs, d["caps"])
                 sort_matches!(c_matches, indptr)
                 @test s_matches == d["s_matches_s_opt"]
                 @test c_matches == d["c_matches_s_opt"]
