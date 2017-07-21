@@ -297,6 +297,11 @@ function matching(prop_prefs,resp_prefs,caps,reverse)
                     
                         resp_accepted[i] = 1  
                     
+                    elseif findfirst(prop_prefs[resp_prefs[i][order[i]]],i) == 0 && resp_prefs[i][order[i]] !== 0   
+                        #大学が志望する学生の選択肢の中に大学がない
+                        
+                        order[i] += 1
+                        
                     else
 
                         if prop_matched[resp_prefs[i][order[i]]] == 0      #希望の学生が空いているとき
